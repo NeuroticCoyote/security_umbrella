@@ -11,7 +11,11 @@ import Config
 # before starting your production server.
 config :security_web, SecurityWeb.Endpoint,
   url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  cache_static_manifest: "priv/static/cache_manifest.json",
+
+  # NOTE NOTE: We won’t see our “Phoenix welcome page” in localhost:4000.
+  # This is because in the production environment we need to start everything explicitly and our cowboy server is not started.
+  server: true   # this allows access to localhost:4000 using PROD config
 
 # ## SSL Support
 #

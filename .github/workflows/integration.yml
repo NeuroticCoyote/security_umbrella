@@ -1,11 +1,10 @@
 ---
-
 name: Integration
 
 on: push
 
 env:
-  REBAR_VERSION: 3.18.0
+  ELIXIR_VERSION: 1.13.3
   OTP_VERSION: 23.2.3
 
 jobs:
@@ -18,14 +17,43 @@ jobs:
       - uses: erlef/setup-beam@v1
         with:
           otp-version: ${{env.OTP_VERSION}}
-          rebar3-version: ${{env.REBAR_VERSION}}
+          elixir-version: ${{env.ELIXIR_VERSION}}
 
-      - name: "Check that code is formatted"
-        working-directory: apps/security
-        run: rebar3 fmt --check
+      - name: Cache Build Directory for the Current OTP/ELIXIR versions
+        uses: actions/cache@v2
+        id: cache-build
+        with:
+          path: _build
+          key: build-test-elixir${{ env.ELIXIR_VERSION }}-otp-${{ env.OTP_VERSION }}
+          restore-keys: |
+            build-test-elixir${{ env.ELIXIR_VERSION }}-otp-${{ env.OTP_VERSION }}
 
-      - name: "Run eunit"
-        run: rebar3 eunit
+      - name: "Get dependencies"
+        run: mix deps.get
 
-      - name: "Run dialyzer"
-        run: rebar3 dialyzer
+      - name: Cache Dependencies
+        uses: actions/cache@v2
+        id: cache-deps
+        with:
+          path: deps
+          key: deps-${{ env.MIX_ENV }}-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            deps-${{ env.MIX_ENV }}-${{ hashFiles('**/mix.lock') }}
+
+      - name: "Get dependencies"
+        run: mix deps.get
+
+      - name: Check Unused Dependencies
+        run: mix deps.unlock --check-unused
+
+      - name: Compile the Project
+        run: mix compile --warnings-as-errors
+
+#      - name: Check Elixir Code Format
+#        run: mix format --check-formatted
+
+      - name: Run Elixir Tests
+        run: mix test --trace --warnings-as-errors
+
+      - name: "Dialyzer"
+        run: MIX_ENV=dev mix dialyzer

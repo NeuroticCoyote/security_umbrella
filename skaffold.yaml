@@ -1,0 +1,9 @@
+apiVersion: skaffold/v2beta12
+kind: Config
+metadata:
+  name: security-skaffold
+build:
+  artifacts:
+    - image: ghcr.io/neuroticcoyote/security_umbrella/security_web
+      docker:
+        dockerfile: Dockerfile

@@ -12,6 +12,17 @@ import Config
 config :security_web,
   generators: [context_app: :security]
 
+config :tailwind,
+  version: "3.1.0",
+  default: [
+    args: ~w(
+      --config=tailwind.config.js
+      --input=css/app.css
+      --output=../priv/static/assets/app.css
+    ),
+    cd: Path.expand("../apps/security_web/assets", __DIR__)
+  ]
+
 # Configures the endpoint
 config :security_web, SecurityWeb.Endpoint,
   url: [host: "localhost"],

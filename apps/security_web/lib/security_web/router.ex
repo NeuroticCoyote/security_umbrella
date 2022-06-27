@@ -18,6 +18,7 @@ defmodule SecurityWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    live "/systems/:id", SystemLive.Show, :show
   end
 
   # Other scopes may use custom stacks.

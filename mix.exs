@@ -7,7 +7,8 @@ defmodule Security.Umbrella.MixProject do
       version: "0.1.0",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases()
+      aliases: aliases(),
+      releases: releases()    #call the private function releases() defined below the depf deps
     ]
   end
 
@@ -24,7 +25,22 @@ defmodule Security.Umbrella.MixProject do
   # Dependencies listed here are available only for this project
   # and cannot be accessed from applications inside the apps/ folder.
   defp deps do
-    []
+    [
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
+    ]
+  end
+
+  # define our releases
+  defp releases do
+    [
+      security_web: [
+        include_executables_for: [:unix],
+        applications: [
+          runtime_tools: :permanent,
+          security_web: :permanent
+        ]
+      ]
+    ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
@@ -39,7 +55,10 @@ defmodule Security.Umbrella.MixProject do
   defp aliases do
     [
       # run `mix setup` in all child apps
-      setup: ["cmd mix setup"]
+      setup: ["cmd mix setup"],
+
+
+      "assets.deploy": ["cmd --app security_web mix assets.deploy"]
     ]
   end
 end
