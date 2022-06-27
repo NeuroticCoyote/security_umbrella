@@ -1,0 +1,31 @@
+---
+
+name: Integration
+
+on: push
+
+env:
+  REBAR_VERSION: 3.18.0
+  OTP_VERSION: 23.2.3
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: master
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: ${{env.OTP_VERSION}}
+          rebar3-version: ${{env.REBAR_VERSION}}
+
+      - name: "Check that code is formatted"
+        working-directory: apps/security
+        run: rebar3 fmt --check
+
+      - name: "Run eunit"
+        run: rebar3 eunit
+
+      - name: "Run dialyzer"
+        run: rebar3 dialyzer
