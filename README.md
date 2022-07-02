@@ -1,5 +1,14 @@
 # Security.Umbrella
 
+# Pre-requisites
+The following must be installed:
+Elixir: https://elixir-lang.org/install.html
+Erlang: https://www.erlang.org/downloads
+Docker: https://docs.docker.com/get-docker/
+Skaffold: https://skaffold.dev/
+Terraform: https://www.terraform.io/downloads
+Npm >= v8: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+
 # Run the App
 Build from scratch and enter the following command:
     iex -S mix phx.server

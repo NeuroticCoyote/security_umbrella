@@ -3,6 +3,7 @@ defmodule SecurityWeb.SystemLive.Show do
 
   @impl true
   def mount(_params, _session, socket) do
+    #PubSub.subscribe(SecurityWeb.PubSub, "security")
 
     socket =
       socket
@@ -14,7 +15,7 @@ defmodule SecurityWeb.SystemLive.Show do
     {:ok, socket}
   end
 
-  # and the handle info
+  # and the handle info to receive messages from the erlang backend!
   @impl true
   def handle_info(_message, _socket) do
   end
