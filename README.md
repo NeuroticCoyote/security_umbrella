@@ -44,3 +44,29 @@ To Run:
 
 # Skaffold
 `skaffold build`
+
+# Terraform
+## Docker
+To initialise and apply:
+```
+cd infra/cloud/docker/
+terraform init
+terraform apply
+```
+Test by running docker ps.
+
+To destroy:
+`terraform destroy`
+
+## Linode
+Make sure to export the Linode API token:
+```
+export TF_VAR_linode_token=TOKEN_HERE
+export LINODE_TOKEN=${TF_VAR_linode_token}
+```
+Then:
+```
+cd infra/cloud/linode/lke
+terraform init
+terraform apply
+```
